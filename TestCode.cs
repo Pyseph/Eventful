@@ -8,8 +8,8 @@ namespace Eventful
 		public static GameSession CurrentSession = Program.CurrentSession;
 		public TestCode()
 		{
-			AddTestBox(new Vector2(32, 32), new Vector2(200, 0), new Vector2(20, 0)).Anchored = false;
-			AddTestBox(new Vector2(32, 32), new Vector2(600, 0), new Vector2(-25, 0)).Anchored = false;
+			AddTestBox(new Vector2(32, 32), new Vector2(500, 0), new Vector2(0, 0)).Anchored = true;
+			AddTestBox(new Vector2(32, 32), new Vector2(600, 0), new Vector2(-55, 5)).Anchored = false;
 		}
 		public Object AddTestBox(Vector2 Size, Vector2 Position, Vector2 Velocity)
 		{

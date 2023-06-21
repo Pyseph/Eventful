@@ -34,16 +34,17 @@ namespace Eventful
 		{
 			Position = _nextPosition;
 		}
-		public void UpdateCollision(Vector2 NewPosition)
+		public void UpdateCollision(double Step)
 		{
+			Vector2 NewPosition = this.Position;
 			bool didCollide = false;
 
 			// Split the movement into smaller steps to prevent tunneling
-			int numSubSteps = 1;
+			int numSubSteps = 4;
 			for (int i = 0; i < numSubSteps; i++)
 			{
 				Vector2 subStepPosition = Position + (NewPosition - Position) * (float)i / numSubSteps;
-				if (detectCollision(NewPosition))
+				if (detectCollision(Step, NewPosition))
 				{
 					didCollide = true;
 					break;
@@ -61,7 +62,7 @@ namespace Eventful
 			GameEvents.PostPhysics.Invoked -= postPhysicsUpdate;
 		}
 
-		private bool detectCollision(Vector2 NewPosition)
+		private bool detectCollision(double Step, Vector2 NewPosition)
 		{
 			bool didCollide = false;
 			foreach (Collider other in PhysicsHandler.Colliders)
@@ -74,47 +75,57 @@ namespace Eventful
 					NewPosition.Y + Size.Y > other.Position.Y)
 				{
 					// Resolve the collision
-					resolveCollision(other);
+					resolveCollision(Step, other);
 					didCollide = true;
 				}
 			}
 
 			return didCollide;
 		}
-        private void resolveCollision(Collider other)
+        private void resolveCollision(double Step, Collider other)
 		{
-			// Calculate the overlap between the two colliders
-			int xOverlap = (int)(Math.Min(Position.X + Size.X, other.Position.X + other.Size.X) - Math.Max(Position.X, other.Position.X));
-			int yOverlap = (int)(Math.Min(Position.Y + Size.Y, other.Position.Y + other.Size.Y) - Math.Max(Position.Y, other.Position.Y));
+			// there needs to be support for sliding when colliding with two objects
+			// to do this, we need to know the direction of the collision
+			Vector2 NewPosition = this.Position;
+			Vector2 otherNewPosition = other.Position;
 
-			// If the x overlap is smaller than the y overlap, move the x position
-			if (xOverlap < yOverlap)
+			Vector2 thisCenter = this.Position + this.Size / 2;
+			Vector2 otherCenter = other.Position + other.Size / 2;
+
+			Vector2 thisCenterToOtherCenter = otherCenter - thisCenter;
+
+			// if the x distance is greater than the y distance, then the collision is horizontal
+			// otherwise, the collision is vertical
+			if (Math.Abs(thisCenterToOtherCenter.X) > Math.Abs(thisCenterToOtherCenter.Y))
 			{
-				// If the x position is to the left of the other collider, move it to the left
-				if (Position.X < other.Position.X)
+				// horizontal collision
+				if (thisCenterToOtherCenter.X > 0)
 				{
-					_nextPosition.X -= xOverlap;
+					// this is to the left of other
+					NewPosition.X = other.Position.X - this.Size.X;
 				}
-				// If the x position is to the right of the other collider, move it to the right
 				else
 				{
-					_nextPosition.X += xOverlap;
+					// this is to the right of other
+					NewPosition.X = other.Position.X + other.Size.X;
 				}
 			}
-			// If the y overlap is smaller than the x overlap, move the y position
 			else
 			{
-				// If the y position is above the other collider, move it up
-				if (Position.Y < other.Position.Y)
+				// vertical collision
+				if (thisCenterToOtherCenter.Y > 0)
 				{
-					_nextPosition.Y -= yOverlap;
+					// this is above other
+					NewPosition.Y = other.Position.Y - this.Size.Y;
 				}
-				// If the y position is below the other collider, move it down
 				else
 				{
-					_nextPosition.Y += yOverlap;
+					// this is below other
+					NewPosition.Y = other.Position.Y + other.Size.Y;
 				}
 			}
+
+			this._nextPosition = NewPosition;
 		}
 	}
 }

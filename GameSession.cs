@@ -15,7 +15,6 @@ namespace Eventful
 		public SpriteBatch SpriteBatch;
 
 		private GraphicsDeviceManager _graphics;
-		private readonly Stopwatch _timer = new();
 		private double _elapsedTime = 0;
 
 		public GameSession()
@@ -27,7 +26,6 @@ namespace Eventful
 
 		protected override void Initialize()
 		{
-			_timer.Start();
 			base.Initialize();
 			new TestCode();
 		}
@@ -53,7 +51,7 @@ namespace Eventful
 			6. (Event) PostPhysics, which runs all callbacks without pausing the game.
 			*/
 
-			double elapsedTime = _timer.Elapsed.TotalSeconds;
+			double elapsedTime = gameTime.TotalGameTime.TotalSeconds;
 			double timeSinceLastFrame = elapsedTime - _elapsedTime;
 
 			// 1. User input logic
@@ -65,7 +63,7 @@ namespace Eventful
 			// 4. PrePhysics
 			GameEvents.PrePhysics.Invoke(timeSinceLastFrame);
 			// 5. Physics
-			PhysicsHandler.UpdateColliders();
+			PhysicsHandler.UpdateColliders(timeSinceLastFrame);
 			// 6. PostPhysics
 			GameEvents.PostPhysics.Invoke(timeSinceLastFrame);
 
@@ -75,7 +73,7 @@ namespace Eventful
 
 		protected override void Draw(GameTime gameTime)
 		{
-			double elapsedTime = _timer.Elapsed.TotalSeconds;
+			double elapsedTime = gameTime.TotalGameTime.TotalSeconds;
 			double timeSinceLastFrame = elapsedTime - _elapsedTime;
 
 			GraphicsDevice.Clear(Color.CornflowerBlue);

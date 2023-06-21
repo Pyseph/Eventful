@@ -14,12 +14,12 @@ namespace Eventful
 		{
 			Colliders.Add(collider);
 		}
-		public void UpdateColliders()
+		public void UpdateColliders(double step)
 		{
 			foreach (Collider collider in Colliders)
 			{
 				if (collider.Anchored) continue;
-				collider.UpdateCollision(collider.Position);
+				collider.UpdateCollision(step);
 			}
 		}
 	}
