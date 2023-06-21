@@ -8,16 +8,17 @@ namespace Eventful
 		public static GameSession CurrentSession = Program.CurrentSession;
 		public TestCode()
 		{
-			AddTestBox(new Vector2(32, 32), new Vector2(200, 0), new Vector2(50, 0));
-			AddTestBox(new Vector2(32, 32), new Vector2(600, 0), new Vector2(-50, 0));
+			AddTestBox(new Vector2(32, 32), new Vector2(200, 0), new Vector2(20, 0)).Anchored = false;
+			AddTestBox(new Vector2(32, 32), new Vector2(600, 0), new Vector2(-25, 0)).Anchored = false;
 		}
-		public void AddTestBox(Vector2 Size, Vector2 Position, Vector2 Velocity)
+		public Object AddTestBox(Vector2 Size, Vector2 Position, Vector2 Velocity)
 		{
 			Object TestBox = new(Position, Size);
 
 			GameEvents.PrePhysics.Invoked += (double step) => {
 				TestBox.Position += Velocity * (float)step;
 			};
+			return TestBox;
 		}
 	}
 }

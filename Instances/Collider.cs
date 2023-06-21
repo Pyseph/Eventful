@@ -5,18 +5,26 @@ namespace Eventful
 {
 	public class Collider
 	{
-		public Vector2 Position;
+		public Vector2 Position {
+			get => _position;
+			set {
+				if (Anchored) _nextPosition = value;
+				_position = value;
+			}
+		}
 		public Vector2 Size;
 		public bool Anchored;
 		public static PhysicsHandler PhysicsHandler = Program.CurrentSession.PhysicsHandler;
 		private Vector2 _nextPosition;
+		private Vector2 _position;
 
 		public Collider(Vector2 InitialPosition, Vector2 InitialSize)
 		{
 			Position = InitialPosition;
 			Size = InitialSize;
 			Anchored = false;
-			_nextPosition = Position;
+			_position = InitialPosition;
+			_nextPosition = InitialPosition;
 
 			PhysicsHandler.AddCollider(this);
 			GameEvents.PostPhysics.Invoked += postPhysicsUpdate;
@@ -31,11 +39,11 @@ namespace Eventful
 			bool didCollide = false;
 
 			// Split the movement into smaller steps to prevent tunneling
-			int numSubSteps = 10;
+			int numSubSteps = 1;
 			for (int i = 0; i < numSubSteps; i++)
 			{
 				Vector2 subStepPosition = Position + (NewPosition - Position) * (float)i / numSubSteps;
-				if (checkCollision(subStepPosition))
+				if (detectCollision(NewPosition))
 				{
 					didCollide = true;
 					break;
@@ -53,7 +61,7 @@ namespace Eventful
 			GameEvents.PostPhysics.Invoked -= postPhysicsUpdate;
 		}
 
-		private bool checkCollision(Vector2 NewPosition)
+		private bool detectCollision(Vector2 NewPosition)
 		{
 			bool didCollide = false;
 			foreach (Collider other in PhysicsHandler.Colliders)
@@ -76,8 +84,8 @@ namespace Eventful
         private void resolveCollision(Collider other)
 		{
 			// Calculate the overlap between the two colliders
-			float xOverlap = Math.Min(Position.X + Size.X, other.Position.X + other.Size.X) - Math.Max(Position.X, other.Position.X);
-			float yOverlap = Math.Min(Position.Y + Size.Y, other.Position.Y + other.Size.Y) - Math.Max(Position.Y, other.Position.Y);
+			int xOverlap = (int)(Math.Min(Position.X + Size.X, other.Position.X + other.Size.X) - Math.Max(Position.X, other.Position.X));
+			int yOverlap = (int)(Math.Min(Position.Y + Size.Y, other.Position.Y + other.Size.Y) - Math.Max(Position.Y, other.Position.Y));
 
 			// If the x overlap is smaller than the y overlap, move the x position
 			if (xOverlap < yOverlap)

@@ -18,7 +18,7 @@ namespace Eventful
 		public bool Anchored
 		{
 			get => Collider.Anchored;
-			set => Collider.Anchored = Anchored;
+			set => Collider.Anchored = value;
 		}
 		public Collider Collider;
 		public bool Visible
