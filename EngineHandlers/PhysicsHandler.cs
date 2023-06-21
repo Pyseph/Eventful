@@ -7,7 +7,7 @@ namespace Eventful
 		public List<Collider> Colliders = new();
 		public PhysicsHandler()
 		{
-			
+
 		}
 
 		public void AddCollider(Collider collider)
@@ -18,6 +18,7 @@ namespace Eventful
 		{
 			foreach (Collider collider in Colliders)
 			{
+				if (collider.Anchored) continue;
 				collider.UpdateCollision(collider.Position);
 			}
 		}

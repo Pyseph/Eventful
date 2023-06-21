@@ -7,6 +7,7 @@ namespace Eventful
 	{
 		public Vector2 Position;
 		public Vector2 Size;
+		public bool Anchored;
 		public static PhysicsHandler PhysicsHandler = Program.CurrentSession.PhysicsHandler;
 		private Vector2 _nextPosition;
 
@@ -14,6 +15,7 @@ namespace Eventful
 		{
 			Position = InitialPosition;
 			Size = InitialSize;
+			Anchored = false;
 			_nextPosition = Position;
 
 			PhysicsHandler.AddCollider(this);

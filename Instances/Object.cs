@@ -15,6 +15,11 @@ namespace Eventful
 			get => Collider.Size;
 			set => Collider.Size = value;
 		}
+		public bool Anchored
+		{
+			get => Collider.Anchored;
+			set => Collider.Anchored = Anchored;
+		}
 		public Collider Collider;
 		public bool Visible
 		{
