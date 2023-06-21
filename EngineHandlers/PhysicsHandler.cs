@@ -18,7 +18,7 @@ namespace Eventful
 		{
 			foreach (Collider collider in Colliders)
 			{
-				collider.UpdatePosition(collider.Position);
+				collider.UpdateCollision(collider.Position);
 			}
 		}
 	}

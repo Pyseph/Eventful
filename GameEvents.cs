@@ -13,15 +13,13 @@ namespace Eventful
 
 
             public delegate void InvokedDelegate(T Data);
-            public event InvokedDelegate Invoked; // Fired when the event is invoked
-            public event InvokedDelegate InvokedOnce; // Fired once, then automatically removed
+            public event InvokedDelegate Invoked;
 
             public InvokedEvent(bool yieldThread = false)
             {
                 this.yieldThread = yieldThread;
 
                 Invoked += (T Data) => { };
-                InvokedOnce += (T Data) => { };
             }
 
             public void Invoke(T Data)

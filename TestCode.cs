@@ -1,7 +1,5 @@
-using System;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-
+using System.Threading;
 
 namespace Eventful
 {
@@ -10,19 +8,20 @@ namespace Eventful
 		public static GameSession CurrentSession = Program.CurrentSession;
 		public TestCode()
 		{
-			AddTestBox(new Vector2(32, 32), new Vector2(0, 0), new Vector2(50, 0));
-			AddTestBox(new Vector2(32, 32), new Vector2(800, 0), new Vector2(-50, 0));
+			// sleep for 3 seconds on a new thread to not block the main thread
+			new Thread(() =>
+			{
+				Thread.Sleep(0);
+				AddTestBox(new Vector2(32, 32), new Vector2(200, 0), new Vector2(50, 0));
+				AddTestBox(new Vector2(32, 32), new Vector2(600, 0), new Vector2(-50, 0));
+			}).Start();
 		}
 		public void AddTestBox(Vector2 Size, Vector2 Position, Vector2 Velocity)
 		{
-			Collider TestBox = new Collider(Position, Size);
+			Object TestBox = new(Position, Size);
 
-			CurrentSession.DrawQueue.Add(TestBox, (double step) => {
-				RenderHandler.DrawBox(TestBox.Position, TestBox.Size);
-			});
-
-			GameEvents.PreRender.Invoked += (double step) => {
-				TestBox.UpdatePosition(TestBox.Position + Velocity*(float)step);
+			GameEvents.PrePhysics.Invoked += (double step) => {
+				TestBox.Position += Velocity * (float)step;
 			};
 		}
 	}
