@@ -4,7 +4,6 @@ namespace Eventful
 {
 	public class Object
 	{
-		// get and set position and size directly to collider
 		public Vector2 Position
 		{
 			get => Collider.Position;
@@ -20,15 +19,14 @@ namespace Eventful
 			get => Collider.Anchored;
 			set => Collider.Anchored = value;
 		}
-		private bool canCollide;
 		public bool CanCollide
 		{
-			get => canCollide;
+			get => _canCollide;
 			set
 			{
-				canCollide = value;
-				if (canCollide) Collider.AddToPhysicsHandler();
-				else Collider.RemoveFromPhysicsHandler();
+				_canCollide = value;
+				if (_canCollide) Program.CurrentSession.PhysicsHandler.AddCollider(this.Collider);
+				else Program.CurrentSession.PhysicsHandler.RemoveCollider(this.Collider);
 			}
 		}
 		public Collider Collider;
@@ -48,22 +46,23 @@ namespace Eventful
 				}
 			}
 		}
+		private bool _canCollide = true;
 		private bool _visible = true;
 		public Object(Vector2 Position, Vector2 Size)
 		{
 			this.Collider = new Collider(Position, Size);
 			this.Position = Position;
 			this.Size = Size;
-
-			addToRenderQueue();
+			this.CanCollide = true;
+			this.Visible = true;
 		}
 
 		private void addToRenderQueue()
 		{
-			Program.CurrentSession.DrawQueue.Add(this, (double timeSinceLastFrame) =>
-			{
-				RenderHandler.DrawBox(this.Position, this.Size);
-			});
+			//Program.CurrentSession.DrawQueue.Add(this, (double timeSinceLastFrame) =>
+			//{
+				//RenderHandler.DrawBox(this.Position, this.Size, this);
+			//});
 		}
 		private void removeFromRenderQueue()
 		{

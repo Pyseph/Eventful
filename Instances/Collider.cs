@@ -1,6 +1,6 @@
 using Microsoft.Xna.Framework;
 using System;
-
+using System.Diagnostics;
 namespace Eventful
 {
 	public class Collider
@@ -26,7 +26,7 @@ namespace Eventful
 			_position = InitialPosition;
 			_nextPosition = InitialPosition;
 
-			AddToPhysicsHandler();
+			PhysicsHandler.AddCollider(this);
 		}
 
 		private void postPhysicsUpdate(double step)
@@ -56,19 +56,20 @@ namespace Eventful
 			}
 		}
 
-		public void RemoveFromPhysicsHandler()
-		{
-			PhysicsHandler.Colliders.Remove(this);
-			GameEvents.PostPhysics.Invoked += postPhysicsUpdate;
-		}
-		public void AddToPhysicsHandler()
-		{
-			PhysicsHandler.Colliders.Add(this);
-			GameEvents.PostPhysics.Invoked -= postPhysicsUpdate;
-		}
 		public void Destroy()
 		{
-			RemoveFromPhysicsHandler();
+			PhysicsHandler.RemoveCollider(this);
+		}
+		public void EnableDebug()
+		{
+			Program.CurrentSession.DrawQueue.Add(this, (double timeSinceLastFrame) =>
+			{
+				RenderHandler.DrawBox(this.Position, this.Size, this);
+			});
+		}
+		public void DisableDebug()
+		{
+			Program.CurrentSession.DrawQueue.Remove(this);
 		}
 
 		private bool detectCollision(double Step, Vector2 NewPosition)
@@ -84,6 +85,7 @@ namespace Eventful
 					NewPosition.Y + Size.Y > other.Position.Y)
 				{
 					// Resolve the collision
+					Debug.WriteLine("Collision detected");
 					resolveCollision(Step, other);
 					didCollide = true;
 				}
