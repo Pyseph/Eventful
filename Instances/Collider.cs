@@ -26,8 +26,7 @@ namespace Eventful
 			_position = InitialPosition;
 			_nextPosition = InitialPosition;
 
-			PhysicsHandler.AddCollider(this);
-			GameEvents.PostPhysics.Invoked += postPhysicsUpdate;
+			AddToPhysicsHandler();
 		}
 
 		private void postPhysicsUpdate(double step)
@@ -56,10 +55,20 @@ namespace Eventful
 				this._nextPosition = NewPosition;
 			}
 		}
-		public void Destroy()
+
+		public void RemoveFromPhysicsHandler()
 		{
 			PhysicsHandler.Colliders.Remove(this);
+			GameEvents.PostPhysics.Invoked += postPhysicsUpdate;
+		}
+		public void AddToPhysicsHandler()
+		{
+			PhysicsHandler.Colliders.Add(this);
 			GameEvents.PostPhysics.Invoked -= postPhysicsUpdate;
+		}
+		public void Destroy()
+		{
+			RemoveFromPhysicsHandler();
 		}
 
 		private bool detectCollision(double Step, Vector2 NewPosition)

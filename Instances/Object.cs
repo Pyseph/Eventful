@@ -20,6 +20,17 @@ namespace Eventful
 			get => Collider.Anchored;
 			set => Collider.Anchored = value;
 		}
+		private bool canCollide;
+		public bool CanCollide
+		{
+			get => canCollide;
+			set
+			{
+				canCollide = value;
+				if (canCollide) Collider.AddToPhysicsHandler();
+				else Collider.RemoveFromPhysicsHandler();
+			}
+		}
 		public Collider Collider;
 		public bool Visible
 		{
