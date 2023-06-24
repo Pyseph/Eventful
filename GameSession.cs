@@ -14,6 +14,10 @@ namespace Eventful
 		public Dictionary<object, Action<double>> DrawQueue = new();
 		public SpriteBatch SpriteBatch;
 
+        public GameEvents.Event<double> PreRender = new(true);
+        public GameEvents.Event<double> PrePhysics = new(true);
+        public GameEvents.Event<double> PostPhysics = new();
+
 		private GraphicsDeviceManager _graphics;
 		private double _elapsedTime = 0;
 
@@ -28,6 +32,7 @@ namespace Eventful
 		{
 			base.Initialize();
 			new TestCode();
+			new MapHitboxEditor();
 		}
 
 		protected override void LoadContent()
@@ -57,15 +62,15 @@ namespace Eventful
 			// 1. User input logic
 			UserInputHandler.Update();
 			// 2. PreRender
-			GameEvents.PreRender.Invoke(timeSinceLastFrame);
+			PreRender.Invoke(timeSinceLastFrame);
 			// 3. Draw
 			Draw(gameTime);
 			// 4. PrePhysics
-			GameEvents.PrePhysics.Invoke(timeSinceLastFrame);
+			PrePhysics.Invoke(timeSinceLastFrame);
 			// 5. Physics
 			PhysicsHandler.UpdateColliders(timeSinceLastFrame);
 			// 6. PostPhysics
-			GameEvents.PostPhysics.Invoke(timeSinceLastFrame);
+			PostPhysics.Invoke(timeSinceLastFrame);
 
 			base.Update(gameTime);
 			_elapsedTime = elapsedTime;

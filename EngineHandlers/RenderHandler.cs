@@ -6,7 +6,9 @@ namespace Eventful
 	public class RenderHandler
 	{
 		public static GameSession CurrentSession = Program.CurrentSession;
-		private static Texture2D _hitboxTexture = CurrentSession.Content.Load<Texture2D>("BoxOutline");
+		private static Texture2D _whiteSquare = CurrentSession.Content.Load<Texture2D>("WhiteSquare");
+
+		private static float _goldenRatio = (float)(1 + System.Math.Sqrt(5)) / 2;
 
 		public RenderHandler()
 		{
@@ -37,20 +39,27 @@ namespace Eventful
 		public static void DrawBox(Vector2 Position, Vector2 Size, object sender = null)
 		{
 			// Generate a unique color for each object using the golden ratio
-			float goldenRatio = (float)(1 + System.Math.Sqrt(5)) / 2;
-			float hue = sender != null ? sender.GetHashCode() * goldenRatio : 0;
+			float hue = sender != null ? sender.GetHashCode() * _goldenRatio : 0;
 			Color color = colorFromHSV(hue, 1, 1);
 
-			CurrentSession.SpriteBatch.Draw(
-				texture: _hitboxTexture,
-				destinationRectangle: new Rectangle((int)Position.X, (int)Position.Y, (int)Size.X, (int)Size.Y),
-				color: color,
-				effects: SpriteEffects.None,
-				layerDepth: 0.1f,
-				rotation: 0,
-				origin: new Vector2(0, 0),
-				sourceRectangle: null
-			);
+			// draw 4 lines to make a box
+			int lineThickness = 2;
+			// negative sizes aren't supported, so if the size is negative, flip it and the position
+			if (Size.X < 0)
+			{
+				Size.X *= -1;
+				Position.X -= Size.X;
+			}
+			if (Size.Y < 0)
+			{
+				Size.Y *= -1;
+				Position.Y -= Size.Y;
+			}
+
+			CurrentSession.SpriteBatch.Draw(_whiteSquare, Position, new Rectangle(0, 0, (int)Size.X, lineThickness), color);
+			CurrentSession.SpriteBatch.Draw(_whiteSquare, Position, new Rectangle(0, 0, lineThickness, (int)Size.Y), color);
+			CurrentSession.SpriteBatch.Draw(_whiteSquare, Position + new Vector2(0, Size.Y - lineThickness), new Rectangle(0, 0, (int)Size.X, lineThickness), color);
+			CurrentSession.SpriteBatch.Draw(_whiteSquare, Position + new Vector2(Size.X - lineThickness, 0), new Rectangle(0, 0, lineThickness, (int)Size.Y), color);
 		}
 	}
 }

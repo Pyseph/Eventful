@@ -1,55 +1,55 @@
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Input;
-using System.Threading;
-using System.Diagnostics;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Eventful
 {
+    public class Connection
+    {
+        private Action callback;
+        public Connection(Action callback)
+        {
+            this.callback = callback;
+        }
+        public void Disconnect()
+        {
+            callback();
+        }
+    }
     public class GameEvents
     {
-        public class InvokedEvent<T> : GameEvents
+        public class Event<T> : GameEvents
         {
-            private bool yieldThread;
-
-
-            public delegate void InvokedDelegate(T Data);
-            public event InvokedDelegate Invoked;
-
-            public InvokedEvent(bool yieldThread = false)
+            private bool yieldsUntilAllInvoked;
+            private List<Action<T>> callbacks = new();
+            public Event(bool yieldsUntilAllInvoked = false)
             {
-                this.yieldThread = yieldThread;
-
-                Invoked += (T Data) => { };
+                this.yieldsUntilAllInvoked = yieldsUntilAllInvoked;
             }
 
-            public void Invoke(T Data)
+            public Connection Connect(Action<T> callback)
             {
-                if (yieldThread)
+                callbacks.Add(callback);
+                return new Connection(() => {
+                    callbacks.Remove(callback);
+                });
+            }
+            public void Invoke(T arg)
+            {
+                if (yieldsUntilAllInvoked)
                 {
-                    foreach (InvokedDelegate handler in Invoked.GetInvocationList())
+                    foreach (Action<T> callback in callbacks)
                     {
-                        handler.Invoke(Data);
+                        callback(arg);
                     }
-                } else {
-                    // call handlers on a separate thread
-                    new Thread(() =>
-                    {
-                        foreach (InvokedDelegate handler in Invoked.GetInvocationList())
-                        {
-                            handler.Invoke(Data);
-                        }
-                    }).Start();
+                }
+                else
+                {
+                    Parallel.ForEach(callbacks, callback => {
+                        callback(arg);
+                    });
                 }
             }
         }
-
-        public static InvokedEvent<double> PreRender = new(true);
-        public static InvokedEvent<double> PrePhysics = new(true);
-        public static InvokedEvent<double> PostPhysics = new();
-
-        public static InvokedEvent<Keys> InputBegan = new();
-        public static InvokedEvent<Keys> InputEnded = new();
-
-        public static InvokedEvent<Point> MouseButton1Down = new();
     }
 }

@@ -24,3 +24,4 @@ C:\Users\User\Desktop\Main Projects\Misc. Projects\Eventful\obj\Debug\net6.0\Eve
 C:\Users\User\Desktop\Main Projects\Misc. Projects\Eventful\obj\Debug\net6.0\Eventful.genruntimeconfig.cache
 C:\Users\User\Desktop\Main Projects\Misc. Projects\Eventful\obj\Debug\net6.0\ref\Eventful.dll
 C:\Users\User\Desktop\Main Projects\Misc. Projects\Eventful\bin\Debug\net6.0\Content\BoxOutline.xnb
+C:\Users\User\Desktop\Main Projects\Misc. Projects\Eventful\bin\Debug\net6.0\Content\WhiteSquare.xnb

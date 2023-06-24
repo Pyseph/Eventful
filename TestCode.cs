@@ -15,9 +15,9 @@ namespace Eventful
 		{
 			Object TestBox = new(Position, Size);
 
-			GameEvents.PrePhysics.Invoked += (double step) => {
+			CurrentSession.PrePhysics.Connect((double step) => {
 				TestBox.Position += Velocity * (float)step;
-			};
+			});
 			return TestBox;
 		}
 	}
