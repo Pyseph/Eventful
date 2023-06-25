@@ -12,16 +12,15 @@ namespace Eventful
 		{
 			CurrentSession.PhysicsHandler.DebugMode = true;
 			UserInputHandler.MouseButton1Down.Connect((Vector2 Position) => {
-				startDrawingHitbox();
+				startDrawingHitbox(Position);
 			});
 			UserInputHandler.MouseButton1Up.Connect((Vector2 Position) => {
 				stopDrawingHitbox();
 			});
 		}
 
-		private void startDrawingHitbox()
+		private void startDrawingHitbox(Vector2 startPosition)
 		{
-			Vector2 startPosition = UserInputHandler.GetMouseLocation();
 			Collider hitbox = new(startPosition, new Vector2(0, 0));
 			hitbox.Anchored = true;
 
