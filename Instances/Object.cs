@@ -1,4 +1,5 @@
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace Eventful
 {
@@ -30,48 +31,21 @@ namespace Eventful
 			}
 		}
 		public Collider Collider;
-		public bool Visible
-		{
-			get => _visible;
-			set
-			{
-				_visible = value;
-				if (_visible)
-				{
-					addToRenderQueue();
-				}
-				else
-				{
-					removeFromRenderQueue();
-				}
-			}
-		}
+		public int ZIndex = 1;
 		private bool _canCollide = true;
 		private bool _visible = true;
+		public Appearance Appearance;
 		public Object(Vector2 Position, Vector2 Size)
 		{
 			this.Collider = new Collider(Position, Size);
 			this.Position = Position;
 			this.Size = Size;
 			this.CanCollide = true;
-			this.Visible = true;
-		}
-
-		private void addToRenderQueue()
-		{
-			//Program.CurrentSession.DrawQueue.Add(this, (double timeSinceLastFrame) =>
-			//{
-				//RenderHandler.DrawBox(this.Position, this.Size, this);
-			//});
-		}
-		private void removeFromRenderQueue()
-		{
-			Program.CurrentSession.DrawQueue.Remove(this);
 		}
 
 		public void Destroy()
 		{
-			this.Visible = false;
+			this.Appearance.Destroy();
 			this.Collider.Destroy();
 		}
 	}

@@ -11,12 +11,13 @@ namespace Eventful
 	{
 		public UserInputHandler UserInputHandler = new();
 		public PhysicsHandler PhysicsHandler = new();
-		public Dictionary<object, Action<double>> DrawQueue = new();
 		public SpriteBatch SpriteBatch;
 
         public GameEvents.Event<double> PreRender = new(true);
+		public GameEvents.Event<double> ProcessRender = new(true);
         public GameEvents.Event<double> PrePhysics = new(true);
         public GameEvents.Event<double> PostPhysics = new();
+		public MapHitboxManager MapHitboxManager;
 
 		private GraphicsDeviceManager _graphics;
 		private double _elapsedTime = 0;
@@ -32,7 +33,8 @@ namespace Eventful
 		{
 			base.Initialize();
 			new TestCode();
-			new MapHitboxEditor();
+			//new MapHitboxEditor();
+			MapHitboxManager = new();
 		}
 
 		protected override void LoadContent()
@@ -84,10 +86,7 @@ namespace Eventful
 			GraphicsDevice.Clear(Color.CornflowerBlue);
 
 			SpriteBatch.Begin(SpriteSortMode.BackToFront, null);
-			foreach (KeyValuePair<object, Action<double>> item in DrawQueue)
-			{
-				item.Value.Invoke(timeSinceLastFrame);
-			}
+			ProcessRender.Invoke(timeSinceLastFrame);
 			SpriteBatch.End();
 
 			base.Draw(gameTime);

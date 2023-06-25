@@ -14,6 +14,7 @@ namespace Eventful
 		public Object AddTestBox(Vector2 Size, Vector2 Position, Vector2 Velocity)
 		{
 			Object TestBox = new(Position, Size);
+			Appearance TestBoxAppearance = new("TestBox");
 
 			CurrentSession.PrePhysics.Connect((double step) => {
 				TestBox.Position += Velocity * (float)step;

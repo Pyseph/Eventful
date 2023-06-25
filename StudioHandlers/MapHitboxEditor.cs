@@ -1,5 +1,6 @@
 using Microsoft.Xna.Framework;
 using System.Diagnostics;
+using System.Collections.Generic;
 
 namespace Eventful
 {
@@ -7,7 +8,8 @@ namespace Eventful
 	{
 		public static GameSession CurrentSession = Program.CurrentSession;
 		public static UserInputHandler UserInputHandler = CurrentSession.UserInputHandler;
-		private Connection updateConnection;
+		private Connection _updateConnection;
+		private Collider _currentHitbox;
 		public MapHitboxEditor()
 		{
 			CurrentSession.PhysicsHandler.DebugMode = true;
@@ -21,18 +23,22 @@ namespace Eventful
 
 		private void startDrawingHitbox(Vector2 startPosition)
 		{
-			Collider hitbox = new(startPosition, new Vector2(0, 0));
-			hitbox.Anchored = true;
+			_currentHitbox = new(startPosition, new Vector2(0, 0));
+			_currentHitbox.Anchored = true;
+			CurrentSession.MapHitboxManager.AddHitbox(_currentHitbox);
 
-			this.updateConnection = CurrentSession.PreRender.Connect((double step) => {
+			this._updateConnection = CurrentSession.PreRender.Connect((double step) => {
 				Vector2 endPosition = UserInputHandler.GetMouseLocation();
-				hitbox.Size = endPosition - startPosition;
+				_currentHitbox.Size = endPosition - startPosition;
 			});
 		}
 		private void stopDrawingHitbox()
 		{
-			this.updateConnection.Disconnect();
-			this.updateConnection = null;
+			this._updateConnection.Disconnect();
+			this._updateConnection = null;
+
+			CurrentSession.MapHitboxManager.SaveHitboxData(MapHitboxManager.Hitboxes.Count - 1, _currentHitbox.Size, _currentHitbox.Position);
+			_currentHitbox = null;
 		}
 	}
 }
