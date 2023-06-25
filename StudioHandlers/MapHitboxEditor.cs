@@ -7,24 +7,21 @@ namespace Eventful
 	{
 		public static GameSession CurrentSession = Program.CurrentSession;
 		public static UserInputHandler UserInputHandler = CurrentSession.UserInputHandler;
-		public bool IsDrawingHitbox = false;
 		private Connection updateConnection;
 		public MapHitboxEditor()
 		{
 			CurrentSession.PhysicsHandler.DebugMode = true;
 			UserInputHandler.MouseButton1Down.Connect((Vector2 Position) => {
-				StartDrawingHitbox();
+				startDrawingHitbox();
 			});
 			UserInputHandler.MouseButton1Up.Connect((Vector2 Position) => {
-				StopDrawingHitbox();
+				stopDrawingHitbox();
 			});
 		}
 
-		public void StartDrawingHitbox()
+		private void startDrawingHitbox()
 		{
-			IsDrawingHitbox = true;
 			Vector2 startPosition = UserInputHandler.GetMouseLocation();
-
 			Collider hitbox = new(startPosition, new Vector2(0, 0));
 			hitbox.Anchored = true;
 
@@ -33,9 +30,8 @@ namespace Eventful
 				hitbox.Size = endPosition - startPosition;
 			});
 		}
-		public void StopDrawingHitbox()
+		private void stopDrawingHitbox()
 		{
-			IsDrawingHitbox = false;
 			this.updateConnection.Disconnect();
 			this.updateConnection = null;
 		}
