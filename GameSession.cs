@@ -12,6 +12,7 @@ namespace Eventful
 		public UserInputHandler UserInputHandler = new();
 		public PhysicsHandler PhysicsHandler = new();
 		public SpriteBatch SpriteBatch;
+		public AppearanceHitboxes AppearanceHitboxes = new();
 
         public GameEvents.Event<double> PreRender = new(true);
 		public GameEvents.Event<double> ProcessRender = new(true);

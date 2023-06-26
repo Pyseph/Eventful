@@ -5,7 +5,7 @@ namespace Eventful
 	public class PhysicsHandler
 	{
 		public List<Collider> Colliders = new();
-		public bool DebugMode = false;
+		public bool DebugMode = true;
 		public PhysicsHandler()
 		{
 

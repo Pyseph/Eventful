@@ -17,6 +17,7 @@ namespace Eventful
 		public static PhysicsHandler PhysicsHandler = Program.CurrentSession.PhysicsHandler;
 		private Vector2 _nextPosition;
 		private Vector2 _position;
+		private Connection _debugConnection;
 
 		public Collider(Vector2 InitialPosition, Vector2 InitialSize)
 		{
@@ -62,14 +63,14 @@ namespace Eventful
 		}
 		public void EnableDebug()
 		{
-			Program.CurrentSession.DrawQueue.Add(this, (double timeSinceLastFrame) =>
+			_debugConnection = Program.CurrentSession.ProcessRender.Connect((double timeSinceLastFrame) =>
 			{
 				RenderHandler.DrawBox(this.Position, this.Size, this);
 			});
 		}
 		public void DisableDebug()
 		{
-			Program.CurrentSession.DrawQueue.Remove(this);
+			_debugConnection.Disconnect();
 		}
 
 		private bool detectCollision(double Step, Vector2 NewPosition)

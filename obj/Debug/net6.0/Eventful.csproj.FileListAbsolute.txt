@@ -26,3 +26,12 @@ C:\Users\User\Desktop\Main Projects\Misc. Projects\Eventful\obj\Debug\net6.0\ref
 C:\Users\User\Desktop\Main Projects\Misc. Projects\Eventful\bin\Debug\net6.0\Content\BoxOutline.xnb
 C:\Users\User\Desktop\Main Projects\Misc. Projects\Eventful\bin\Debug\net6.0\Content\WhiteSquare.xnb
 C:\Users\User\Desktop\Main Projects\Misc. Projects\Eventful\bin\Debug\net6.0\Content\TestBackground.xnb
+C:\Users\User\Desktop\Main Projects\Misc. Projects\Eventful\bin\Debug\net6.0\Content\Tileset_Grass.xnb
+C:\Users\User\Desktop\Main Projects\Misc. Projects\Eventful\bin\Debug\net6.0\Content\Tileset_Plants.xnb
+C:\Users\User\Desktop\Main Projects\Misc. Projects\Eventful\bin\Debug\net6.0\Content\Tileset_PlantShadows.xnb
+C:\Users\User\Desktop\Main Projects\Misc. Projects\Eventful\bin\Debug\net6.0\Content\Tileset_Player.xnb
+C:\Users\User\Desktop\Main Projects\Misc. Projects\Eventful\bin\Debug\net6.0\Content\Tileset_Props.xnb
+C:\Users\User\Desktop\Main Projects\Misc. Projects\Eventful\bin\Debug\net6.0\Content\Tileset_Shadows.xnb
+C:\Users\User\Desktop\Main Projects\Misc. Projects\Eventful\bin\Debug\net6.0\Content\Tileset_StoneGround.xnb
+C:\Users\User\Desktop\Main Projects\Misc. Projects\Eventful\bin\Debug\net6.0\Content\Tileset_Structs.xnb
+C:\Users\User\Desktop\Main Projects\Misc. Projects\Eventful\bin\Debug\net6.0\Content\Tileset_Walls.xnb

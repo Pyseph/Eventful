@@ -1,5 +1,6 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
+using System.Diagnostics;
 
 namespace Eventful
 {
@@ -21,23 +22,25 @@ namespace Eventful
 		}
 		private Object _parent;
 		private Connection _renderConnection;
-		public Appearance(string TextureName)
+		public Appearance(string TextureName, string TileName = null)
 		{
-			var Data = AppearanceHitboxes.Data[TextureName];
-			var HitboxOffset = Data.Item1;
-			var HitboxSize = Data.Item2;
+			var Data = CurrentSession.AppearanceHitboxes.Data[TileName ?? TextureName];
+			var HitboxSize = Data.Item1;
+			var HitboxOffset = Data.Item2;
 			var PositionOffset = Data.Item3;
 
 			this.PositionOffset = PositionOffset;
 			this.Texture = RenderHandler.LoadTexture(TextureName);
-			this.RenderBounds = new Rectangle(HitboxOffset.ToPoint(), HitboxSize.ToPoint());
+
+			this.RenderBounds = new Rectangle((int)HitboxOffset.X, (int)HitboxOffset.Y, (int)HitboxSize.X, (int)HitboxSize.Y);
 		}
 		private void addRender()
 		{
+			Debug.WriteLine("Adding render" + RenderBounds);
 			this.Parent.Appearance = this;
 			_renderConnection = CurrentSession.ProcessRender.Connect((double timeSinceLastFrame) =>
 			{
-				RenderHandler.DrawTexture(this.Texture, this.Parent.Position + this.PositionOffset, RenderBounds, this.Parent.ZIndex);
+				RenderHandler.DrawTexture(this.Texture, this.Parent.Position, RenderBounds, 0);
 			});
 		}
 		public void Destroy()
