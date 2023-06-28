@@ -15,6 +15,7 @@ namespace Eventful
 		};
 		public AppearanceHitboxes()
 		{
+			// 64 tiles, 32x32 px each
 			addTilesetTextures("Grass", 32, 64);
 		}
 		private void addTilesetTextures(string BaseName, int TileSize, int TileCount)

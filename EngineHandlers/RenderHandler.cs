@@ -53,11 +53,9 @@ namespace Eventful
 
 		public static void DrawBox(Vector2 Position, Vector2 Size, object sender = null)
 		{
-			// Generate a unique color for each object using the golden ratio
 			float hue = sender != null ? sender.GetHashCode() * _goldenRatio : 0;
 			Color color = colorFromHSV(hue, 1, 1);
 
-			// draw 4 lines to make a box
 			int lineThickness = 2;
 			// negative sizes aren't supported, so if the size is negative, flip it and the position
 			if (Size.X < 0)

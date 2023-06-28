@@ -14,14 +14,12 @@ namespace Eventful
 		public void AddCollider(Collider collider)
 		{
 			if (Colliders.Contains(collider)) return;
-			Debug.WriteLine("Added collider");
 			if (DebugMode) collider.EnableDebug();
 			Colliders.Add(collider);
 		}
 		public void RemoveCollider(Collider collider)
 		{
 			if (!Colliders.Contains(collider)) return;
-			Debug.WriteLine("Removed collider");
 			if (DebugMode) collider.DisableDebug();
 			Colliders.Remove(collider);
 		}
