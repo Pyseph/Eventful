@@ -9,7 +9,11 @@ namespace Eventful
 		public static GameSession CurrentSession = Program.CurrentSession;
 		public Texture2D Texture;
 		public Rectangle RenderBounds;
-		public Vector2 TextureSize;
+		public Vector2 TextureSize
+		{
+			get => _textureSize;
+			set => updateTextureSize(value);
+		};
 		public Vector2 TextureOffset;
 		public Object Parent
 		{
@@ -23,17 +27,22 @@ namespace Eventful
 		}
 		private Object _parent;
 		private Connection _renderConnection;
+		private Vector2 _textureSize;
 		public Appearance(string TextureName, string TileName = null)
 		{
 			var Data = CurrentSession.TextureData.Data[TileName ?? TextureName];
 			var TextureSize = Data.Item1;
 			var TextureOffset = Data.Item2;
 
-			this.TextureSize = TextureSize;
 			this.TextureOffset = TextureOffset;
 			this.Texture = RenderHandler.LoadTexture(TextureName);
 
-			this.RenderBounds = new Rectangle((int)TextureOffset.X, (int)TextureOffset.Y, (int)TextureSize.X, (int)TextureSize.Y);
+			updateTextureSize(TextureSize);
+		}
+		private void updateTextureSize(Vector2 newSize)
+		{
+			this._textureSize = newSize;
+			this.RenderBounds = new Rectangle((int)TextureOffset.X, (int)TextureOffset.Y, (int)newSize.X, (int)newSize.Y);
 		}
 		private void addRender()
 		{
