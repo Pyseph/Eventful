@@ -75,6 +75,11 @@ namespace Eventful
 			CurrentSession.SpriteBatch.Draw(whiteSquare, Position + new Vector2(0, Size.Y - lineThickness), new Rectangle(0, 0, (int)Size.X, lineThickness), color);
 			CurrentSession.SpriteBatch.Draw(whiteSquare, Position + new Vector2(Size.X - lineThickness, 0), new Rectangle(0, 0, lineThickness, (int)Size.Y), color);
 		}
+		public static void DrawRect(Vector2 Position, Vector2 Size, Color color)
+		{
+			var whiteSquare = LoadTexture("WhiteSquare");
+			CurrentSession.SpriteBatch.Draw(whiteSquare, Position, new Rectangle(0, 0, (int)Size.X, (int)Size.Y), color);
+		}
 
 		public static void DrawTexture(Texture2D Texture, Vector2 Position, Rectangle SourceRectangle, int ZIndex)
 		{
