@@ -89,7 +89,7 @@ namespace Eventful
 				origin: Vector2.Zero,
 				scale: 1,
 				effects: SpriteEffects.None,
-				layerDepth: (float)ZIndex
+				layerDepth: (float)-ZIndex
 			);
 		}
 	}

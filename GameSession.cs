@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Input;
 using System.Diagnostics;
 using System.Collections.Generic;
 using System;
+using System.Threading;
 
 namespace Eventful
 {
@@ -12,7 +13,7 @@ namespace Eventful
 		public UserInputHandler UserInputHandler = new();
 		public PhysicsHandler PhysicsHandler = new();
 		public SpriteBatch SpriteBatch;
-		public AppearanceHitboxes AppearanceHitboxes = new();
+		public TextureData TextureData = new();
 
         public GameEvents.Event<double> PreRender = new(true);
 		public GameEvents.Event<double> ProcessRender = new(true);
@@ -30,12 +31,15 @@ namespace Eventful
 			IsMouseVisible = true;
 		}
 
+		private void executeAsync(Action action)
+		{
+			new Thread(() => action()).Start();
+		}
 		protected override void Initialize()
 		{
 			base.Initialize();
-			new TestCode();
-			//new MapHitboxEditor();
-			MapHitboxManager = new();
+			executeAsync(() => new TestCode());
+			executeAsync(() => MapHitboxManager = new());
 		}
 
 		protected override void LoadContent()

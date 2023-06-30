@@ -9,7 +9,8 @@ namespace Eventful
 		public static GameSession CurrentSession = Program.CurrentSession;
 		public Texture2D Texture;
 		public Rectangle RenderBounds;
-		public Vector2 PositionOffset;
+		public Vector2 TextureSize;
+		public Vector2 TextureOffset;
 		public Object Parent
 		{
 			get => _parent;
@@ -24,19 +25,18 @@ namespace Eventful
 		private Connection _renderConnection;
 		public Appearance(string TextureName, string TileName = null)
 		{
-			var Data = CurrentSession.AppearanceHitboxes.Data[TileName ?? TextureName];
-			var HitboxSize = Data.Item1;
-			var HitboxOffset = Data.Item2;
-			var PositionOffset = Data.Item3;
+			var Data = CurrentSession.TextureData.Data[TileName ?? TextureName];
+			var TextureSize = Data.Item1;
+			var TextureOffset = Data.Item2;
 
-			this.PositionOffset = PositionOffset;
+			this.TextureSize = TextureSize;
+			this.TextureOffset = TextureOffset;
 			this.Texture = RenderHandler.LoadTexture(TextureName);
 
-			this.RenderBounds = new Rectangle((int)HitboxOffset.X, (int)HitboxOffset.Y, (int)HitboxSize.X, (int)HitboxSize.Y);
+			this.RenderBounds = new Rectangle((int)TextureOffset.X, (int)TextureOffset.Y, (int)TextureSize.X, (int)TextureSize.Y);
 		}
 		private void addRender()
 		{
-			Debug.WriteLine("Adding render" + RenderBounds);
 			this.Parent.Appearance = this;
 			_renderConnection = CurrentSession.ProcessRender.Connect((double timeSinceLastFrame) =>
 			{

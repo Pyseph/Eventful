@@ -38,10 +38,12 @@ namespace Eventful
             {
                 if (yieldsUntilAllInvoked)
                 {
-                    foreach (Action<T> callback in callbacks)
+                    // Avoiding edge case: adding a callback while its being invoked will cause an exception -
+                    // "Collection was modified; enumeration operation may not execute."
+                    for (int i = 0; i < callbacks.Count; i++)
                     {
-                        callback(arg);
-                    }
+                        callbacks[i](arg);
+                    };
                 }
                 else
                 {

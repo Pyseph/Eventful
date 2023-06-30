@@ -8,7 +8,7 @@ namespace Eventful
 		public Vector2 Position
 		{
 			get => Collider.Position;
-			set => Collider.Position = value;
+			set => updatePosition(value);
 		}
 		public Vector2 Size
 		{
@@ -41,6 +41,11 @@ namespace Eventful
 			this.Position = Position;
 			this.Size = Size;
 			this.CanCollide = true;
+		}
+		private void updatePosition(Vector2 newPosition)
+		{
+			// update collider
+			this.Collider.Position = newPosition;
 		}
 
 		public void Destroy()
